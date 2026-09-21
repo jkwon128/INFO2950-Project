@@ -1,5 +1,4 @@
 # INFO2950-Project
-# INFO 2950 Final Project
 
 ## Research Question
 Does higher inflation correspond to worse stock-market performance?
