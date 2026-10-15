@@ -1,0 +1,2 @@
+month_index,Year,Month,last_trading_date,sp500_close,sp500_return_pct,headline_cpi,headline_yoy_pct,core_cpi,core_yoy_pct,expected_inflation_pct
+24310,2025,10,2025-10-31,6840.2,2.2686836730727222,,,,,4.6
