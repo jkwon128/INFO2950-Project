@@ -7937,14 +7937,13 @@ our starting point is exactly what we downloaded.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Where the data files are.</strong> The cell below reads the four raw <code>.csv</code> files from the folder
-named in <code>DATA</code>. The default, <code>data/raw</code>, means "the <code>data/raw</code> folder sitting next to this
-notebook", which is how the project is organised on our own machines.</p>
-<p>If this notebook is opened somewhere that folder does not exist, such as a fresh Google Colab
-session, the read will fail with a <code>FileNotFoundError</code>. In that case, comment out the first
-<code>DATA</code> line and uncomment the second, which points at the same four files in our project
-repository. <code>pd.read_csv</code> accepts a web address in place of a file path, so no other change is
-needed.</p>
+<p><strong>Where the data files are.</strong> The cell below reads the four raw <code>.csv</code> files from the
+location named in <code>DATA</code>. By default this is our project repository on GitHub, so the
+notebook runs anywhere with an internet connection, including a fresh Google Colab
+session, without any files needing to be uploaded first. <code>pd.read_csv</code> accepts a web
+address in place of a file path, so nothing else in the notebook has to change.</p>
+<p>To run instead from a copy of the data stored alongside this notebook, comment out the
+GitHub line and uncomment <code>DATA = "data/raw"</code>.</p>
 </div>
 </div>
 </div>
@@ -7975,10 +7974,10 @@ needed.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">"figure.figsize"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
 <span class="c1"># Where the raw data files live.</span>
-<span class="c1"># Running on a computer with the data/raw folder next to this notebook: keep the line below.</span>
-<span class="c1"># Running in Google Colab: comment out the line below and use the GitHub line instead.</span>
-<span class="n">DATA</span> <span class="o">=</span> <span class="s2">"data/raw"</span>
-<span class="c1"># DATA = "https://raw.githubusercontent.com/jkwon128/INFO2950-Project/main/data/raw"</span>
+<span class="c1"># Default: read from our project repository, which works anywhere including Google Colab.</span>
+<span class="c1"># To read from a local data/raw folder next to this notebook, swap which line is commented.</span>
+<span class="c1"># DATA = "data/raw"</span>
+<span class="n">DATA</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/jkwon128/INFO2950-Project/main/data/raw"</span>
 
 <span class="c1"># Read the four files exactly as downloaded from FRED</span>
 <span class="n">sp500_raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">DATA</span><span class="si">}</span><span class="s2">/SP500.csv"</span><span class="p">)</span>        <span class="c1"># daily S&amp;P 500 closing level</span>
@@ -7999,7 +7998,7 @@ needed.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>All four raw files loaded from: data/raw
+<pre>All four raw files loaded from: https://raw.githubusercontent.com/jkwon128/INFO2950-Project/main/data/raw
 </pre>
 </div>
 </div>
