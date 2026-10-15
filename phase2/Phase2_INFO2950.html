@@ -9872,7 +9872,8 @@ demand supports earnings, which is why we treat a positive or zero slope as a fu
 outcome rather than a failure.</p>
 <p><strong>Proposed analysis.</strong> Using the 116 monthly observations, with one row per calendar month, fit a
 simple linear regression with an intercept using the <code>LinearRegression</code> method practiced in HW3:</p>
-<p>$$\text{sp500\_return\_pct}_t = \alpha + \beta_{\text{headline}} \times \text{headline\_yoy\_pct}_t$$</p>
+<p>$$\text{Monthly return}_t = \alpha + \beta_{\text{headline}} \times \text{Headline inflation}_t$$</p>
+<p>In the dataset these are the <code>sp500_return_pct</code> and <code>headline_yoy_pct</code> columns.</p>
 <p>The outcome is the monthly S&amp;P 500 price return in percent and the single predictor is
 year-over-year headline CPI inflation in percent. We will report the sample size, the fitted
 intercept, the fitted slope, the R², and a scatterplot with the fitted line drawn on it. We will
@@ -9891,7 +9892,8 @@ volatile components of the basket, it ought to survive when food and energy are 
 appears only in headline inflation and vanishes in core, that would point instead toward energy
 prices in particular, which would itself be worth reporting.</p>
 <p><strong>Proposed analysis.</strong> Using the same 116 observations and the same method, fit:</p>
-<p>$$\text{sp500\_return\_pct}_t = \alpha + \beta_{\text{core}} \times \text{core\_yoy\_pct}_t$$</p>
+<p>$$\text{Monthly return}_t = \alpha + \beta_{\text{core}} \times \text{Core inflation}_t$$</p>
+<p>In the dataset these are the <code>sp500_return_pct</code> and <code>core_yoy_pct</code> columns.</p>
 <p>We will report the same quantities as in Statement 1 and interpret $\beta_{\text{core}}$ in the
 same way, as percentage points of monthly return per percentage point of core inflation. We will
 examine whether $\beta_{\text{core}} &lt; 0$.</p>
