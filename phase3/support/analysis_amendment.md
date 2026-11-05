@@ -1,0 +1,13 @@
+# Phase 3 analysis additions
+
+Working-draft method record dated November 4, 2026; reviewed November 5, 2026 (America/New_York). The existing draft already contained fitted results when reviewed. The timing of this record relative to the first fit is not independently verified, so these additions are not presented as prospectively preregistered.
+
+The controlling plan is the final Phase 2 limitations-revised notebook/PDF, not the older preregistration_plan.md, which used core inflation as its second model. Preserve the final plan's same-month model (116 rows) and previous-calendar-month model (114 rows). Prior Phase 2 EDA already disclosed the same-month correlation and therefore its slope direction and R-squared; this is not a wholly unseen confirmatory test.
+
+Add significance evaluation to meet the Phase 3 rubric. For each negative directional hypothesis, test H0: slope >= 0 against HA: slope < 0, using the zero boundary for the test. Use a calendar-aware Newey-West/Bartlett HAC covariance with three monthly lags, n/(n-k) correction, and approximate normal-reference p-values and 95% two-sided confidence intervals. Retain gaps in the monthly score sequence as zeros (not imputed CPI or return observations). Compare six and twelve monthly lags as sensitivity checks. Apply Holm adjustment across the two primary one-sided p-values, at family-wise alpha 0.05. These inference choices are Phase 3 additions, not claims about the original registration. They remain approximate in this short, potentially nonstationary time series.
+
+Inspect residuals versus fitted values and calendar time for each model. Report calendar-lag residual correlations at 1, 3, 6 and 12 months, with pair counts; these are descriptive diagnostics, not a proof of independence.
+
+Exploratory additions: (1) remove March and April 2020, the crash and rebound identified in Phase 2, from both models and compare coefficients and R-squared; do not choose exclusions based on the new results; (2) refit the same-month model on the lagged model's 114-month sample to separate sample differences from timing; (3) add the same-month monthly-average effective federal funds rate (FEDFUNDS) to the same-month model on the same 116 months. Use interest-rate levels, not a search over lags, changes, or alternative rates. Report descriptive coefficients and R-squared without additional significance claims. This is not a causal adjustment or a forecast.
+
+Keep core inflation and consumer expectations as brief descriptive comparisons, answering the secondary Phase 2 questions. Report every planned result regardless of sign or significance. Keep the original raw snapshots and window; add only the archived FEDFUNDS download for the exploratory extension.
