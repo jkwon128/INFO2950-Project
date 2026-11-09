@@ -21,4 +21,6 @@ To regenerate the notebook cells from their source, run `python support/build_cl
 
 The same-month and previous-month samples contain 116 and 114 unique months, respectively. The calendar lag preserves the October 2025 CPI gap. The March–April 2020 sensitivity samples contain 114 and 112 months. Checks on the original draft also compared the Phase 2 numeric values, matched the scikit-learn and statsmodels coefficients, and checked the calendar-aware HAC covariance against statsmodels on consecutive months and a pairwise calculation on gapped samples.
 
-See the Acknowledgements and bibliography in the [report](Phase3_Report.ipynb) for the scope of OpenAI Codex assistance, including notebook execution and automated checks.
+## AI acknowledgement
+
+AI tools assisted with writing portions of the code, polishing the writing, and reviewing the draft. The authors are responsible for the final analyses and interpretations.

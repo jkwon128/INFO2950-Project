@@ -429,7 +429,7 @@ We thank our Phase 2 reviewers for recommending residual checks, a 2020 sensitiv
 
 We used the INFO 2950 Phase 3-4 rubric and Discussions 9 and 10 to organize the report. The three Discussion 10 example notebooks helped identify useful presentation choices and mistakes to avoid. HW3 informed the regression workflow, and HW5 informed the discussion of regression uncertainty. The calendar-aware HAC calculation is an additional method, explained here and supported by the sources below.
 
-OpenAI Codex helped review project materials and the draft, prepare and run the notebooks, write portions of the code, edit the report, run automated checks, and export the original PDF. The authors are responsible for the final analyses and interpretations.
+AI tools assisted with writing portions of the code, polishing the writing, and reviewing the draft. The authors are responsible for the final analyses and interpretations.
 
 ### Research and methods references
 Fama, E. F., & Schwert, G. W. (1977). Asset returns and inflation. *Journal of Financial Economics, 5*(2), 115-146. [Author's paper page](https://www.billschwert.com/ari.htm).

@@ -158,7 +158,9 @@ print("All checks passed. Seven analysis samples exported.")''')
 md('''## Sources and assistance
 Raw series: [SP500](https://fred.stlouisfed.org/series/SP500), [CPIAUCNS](https://fred.stlouisfed.org/series/CPIAUCNS), [CPILFENS](https://fred.stlouisfed.org/series/CPILFENS), [MICH](https://fred.stlouisfed.org/series/MICH), and [FEDFUNDS](https://fred.stlouisfed.org/series/FEDFUNDS), distributed by FRED. Missing CPI context: [BLS shutdown FAQ](https://www.bls.gov/cpi/additional-resources/2025-federal-government-shutdown-impact-cpi-faq.htm).
 
-This notebook adapts the final Phase 2 cleaning workflow. OpenAI Codex assisted with its code, documentation, execution, and automated checks. The [report](Phase3_Report.ipynb) contains the full acknowledgement and bibliography.''')
+This notebook adapts the final Phase 2 cleaning workflow. See the [report](Phase3_Report.ipynb) for the full bibliography.
+
+AI tools assisted with writing portions of the code, polishing the writing, and reviewing the draft. The authors are responsible for the final analyses and interpretations.''')
 nb=nbf.v4.new_notebook(cells=cells,metadata={"kernelspec":{"display_name":"Python 3","language":"python","name":"python3"}})
 nbf.write(nb,ROOT/'Phase3_Data_Cleaning.ipynb')
 print('Built cleaning notebook')
