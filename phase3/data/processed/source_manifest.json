@@ -1,0 +1,27 @@
+{
+  "SP500": {
+    "source": "https://fred.stlouisfed.org/series/SP500",
+    "sha256": "4cbb08e95f2a14f0c30889c29c3647fc75eae60e618da46c13474931f0b0943d",
+    "snapshot": "Phase 2 preserved"
+  },
+  "CPIAUCNS": {
+    "source": "https://fred.stlouisfed.org/series/CPIAUCNS",
+    "sha256": "293eedcebfd88a8507c785fd669e02694ce54a81977beacde7ac139812f2de06",
+    "snapshot": "Phase 2 preserved"
+  },
+  "CPILFENS": {
+    "source": "https://fred.stlouisfed.org/series/CPILFENS",
+    "sha256": "b4d87b620a63f994e00b83b742384481521beab1d82a13ed1a2c5ea972b7430a",
+    "snapshot": "Phase 2 preserved"
+  },
+  "MICH": {
+    "source": "https://fred.stlouisfed.org/series/MICH",
+    "sha256": "d686c1d3344df066e7d4010e179cf9b718a9eeff33021f50314e9eb188b0adbd",
+    "snapshot": "Phase 2 preserved"
+  },
+  "FEDFUNDS": {
+    "source": "https://fred.stlouisfed.org/series/FEDFUNDS",
+    "sha256": "838955835ab392b577840eb654df1afd3fd316626a2bd19f81320ded71b7e7ed",
+    "snapshot": "Phase 3 addition, November 4, 2026"
+  }
+}
