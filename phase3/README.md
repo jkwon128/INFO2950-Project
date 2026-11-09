@@ -20,4 +20,4 @@ To export the executed report, run `jupyter nbconvert --to html Phase3_Report.ip
 
 ## AI acknowledgement
 
-AI tools assisted with writing portions of the code, polishing the writing, and reviewing the draft. The authors are responsible for the final analyses and interpretations.
+AI tools were used to help write portions of the code, polish the writing, and review the draft. The authors are responsible for the final content and interpretations.
