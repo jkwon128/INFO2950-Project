@@ -1,13 +1,23 @@
 # Phase 3 analysis additions
 
-Working-draft method record dated November 4, 2026; reviewed November 5, 2026 (America/New_York). The existing draft already contained fitted results when reviewed. The timing of this record relative to the first fit is not independently verified, so these additions are not presented as prospectively preregistered.
+This method record is dated November 4, 2026 and was reviewed November 5, 2026 (Eastern time). The draft already contained fitted results at review. The record's timing relative to the first fit could not be verified, so these additions are exploratory or supplemental to the Phase 2 preregistration.
 
-The controlling plan is the final Phase 2 limitations-revised notebook/PDF, not the older preregistration_plan.md, which used core inflation as its second model. Preserve the final plan's same-month model (116 rows) and previous-calendar-month model (114 rows). Prior Phase 2 EDA already disclosed the same-month correlation and therefore its slope direction and R-squared; this is not a wholly unseen confirmatory test.
+## Final Phase 2 plan
 
-Add significance evaluation to meet the Phase 3 rubric. For each negative directional hypothesis, test H0: slope >= 0 against HA: slope < 0, using the zero boundary for the test. Use a calendar-aware Newey-West/Bartlett HAC covariance with three monthly lags, n/(n-k) correction, and approximate normal-reference p-values and 95% two-sided confidence intervals. Retain gaps in the monthly score sequence as zeros (not imputed CPI or return observations). Compare six and twelve monthly lags as sensitivity checks. Apply Holm adjustment across the two primary one-sided p-values, at family-wise alpha 0.05. These inference choices are Phase 3 additions, not claims about the original registration. They remain approximate in this short, potentially nonstationary time series.
+The final Phase 2 submission specifies the same-month headline inflation model (116 months) and the previous-calendar-month headline inflation model (114 months). It supersedes an earlier plan that used core inflation for the second model. Core inflation and consumer expectations remain descriptive comparisons. Phase 2 exploratory analysis already revealed the same-month correlation, which determines the slope direction and R² for that model.
 
-Inspect residuals versus fitted values and calendar time for each model. Report calendar-lag residual correlations at 1, 3, 6 and 12 months, with pair counts; these are descriptive diagnostics, not a proof of independence.
+## Significance and diagnostics
 
-Exploratory additions: (1) remove March and April 2020, the crash and rebound identified in Phase 2, from both models and compare coefficients and R-squared; do not choose exclusions based on the new results; (2) refit the same-month model on the lagged model's 114-month sample to separate sample differences from timing; (3) add the same-month monthly-average effective federal funds rate (FEDFUNDS) to the same-month model on the same 116 months. Use interest-rate levels, not a search over lags, changes, or alternative rates. Report descriptive coefficients and R-squared without additional significance claims. This is not a causal adjustment or a forecast.
+For each main model, test H₀: slope ≥ 0 against Hₐ: slope < 0 at the zero boundary. The primary inference uses calendar-aware Newey–West HAC covariance with Bartlett weights, three monthly lags, the n/(n−k) correction, and approximate normal-reference p-values and two-sided 95% confidence intervals. Months without observations contribute zero to the score sequence. The underlying CPI and returns remain missing. Compare zero, six, and twelve monthly lags and ordinary OLS uncertainty. The zero-lag calculation omits cross-month covariance terms. Apply Holm correction across the two one-sided tests at a family-wise 5% level. Inference remains approximate in this short, potentially nonstationary series.
 
-Keep core inflation and consumer expectations as brief descriptive comparisons, answering the secondary Phase 2 questions. Report every planned result regardless of sign or significance. Keep the original raw snapshots and window; add only the archived FEDFUNDS download for the exploratory extension.
+The report plots residuals against fitted values and calendar time and gives residual correlations and pair counts at lags of 1, 3, 6, and 12 months. These diagnostics describe the observed residuals and leave independence unestablished.
+
+## Exploratory comparisons
+
+1. Refit both models without March and April 2020, the crash and rebound identified in Phase 2. Compare the slopes and R² with the full-sample fits.
+2. Refit the same-month model on the lagged model's 114 months to compare the two timings on a common sample.
+3. Add the same-month monthly-average effective federal funds rate (FEDFUNDS) to the same-month model on the original 116 months. The extension uses the rate level and reports descriptive coefficients and R². It does not identify a causal effect or evaluate forecasting performance.
+
+4. As a post-hoc sensitivity check, exclude June, July, and September 2022 from both models. These are the three months with the largest Cook's distances in the same-month fit. Compare the slopes and R² with the full-sample fits. The primary tests retain all three months.
+
+Phase 3 uses the original snapshots and study window, with the archived FEDFUNDS series added for the third comparison.
