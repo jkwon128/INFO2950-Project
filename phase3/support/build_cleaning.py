@@ -7,7 +7,7 @@ def code(s): cells.append(nbf.v4.new_code_cell(s.strip()))
 md('''# INFO 2950 Phase 3: Data Cleaning
 Jaemin Kwon (jk2975) and Mike Zhang (hz727)
 
-This notebook starts from the saved raw files and exports all datasets used by the Phase 3 report. It preserves the Phase 2 sample and transformations. The additions are a calendar-aligned inflation lag, named sensitivity samples, and a monthly interest-rate series for one exploratory model. No return regressions are fitted here.
+This notebook rebuilds the Phase 2 monthly sample from archived raw data and exports the inputs for the Phase 3 report. It also prepares the one-month inflation lag, the sensitivity samples, and the interest-rate series used in the exploratory model.
 
 Run this notebook from its folder before running `Phase3_Report.ipynb`. The five raw files are in `data/raw`. The original four files are unchanged copies of the Phase 2 snapshots; FEDFUNDS was downloaded from FRED for this phase. The source manifest records file hashes so later revisions can be detected.''')
 md('''## 1. Read the raw files and check coverage
@@ -39,7 +39,7 @@ for name in series:
                   "Last": str(frame.date.max().date())})
 display(pd.DataFrame(audit))''')
 md('''## 2. Calculate month-end price returns
-Remove daily rows without a closing price. Within each month, select the last recorded trading-day close, then match it to the preceding calendar month's close. Return is `100 * (close / previous_close - 1)`. This uses changes between actual closing levels, not changes in monthly averages. It excludes dividends and does not adjust for inflation.''')
+Remove daily rows without a closing price. Within each month, select the last recorded trading-day close, then match it to the preceding calendar month's close. Return is `100 * (close / previous_close - 1)`. This measures nominal price changes between month-end closes and excludes dividends.''')
 code('''prices = raw["SP500"].dropna(subset=["SP500"]).copy()
 ends = prices.groupby("month_index", as_index=False)["date"].max()
 prices = ends.merge(prices, on=["month_index", "date"],
@@ -56,7 +56,7 @@ prices["sp500_return_pct"] = 100 * (
 print("Monthly closing prices:", len(prices))
 print("Daily rows without prices:", int(raw["SP500"].SP500.isna().sum()))''')
 md('''## 3. Calculate year-over-year inflation
-For each CPI series, match the current index to the same calendar month twelve months earlier. The not-seasonally-adjusted series is appropriate for this same-month-across-years comparison, although it does not remove every seasonal influence. A missing index stays missing. The October 2025 gap is documented in the BLS shutdown FAQ; we do not estimate a replacement.''')
+For each CPI series, match the current index to the same calendar month twelve months earlier. The not-seasonally-adjusted series is appropriate for this same-month-across-years comparison, although it does not remove every seasonal influence. A missing index stays missing. The BLS shutdown FAQ documents the October 2025 gap, which remains missing in the cleaned data.''')
 code('''def inflation_table(name, level_name, rate_name):
     frame = raw[name][["month_index", name]].rename(
         columns={name: level_name})
@@ -77,7 +77,7 @@ rates = raw["FEDFUNDS"][["month_index", "FEDFUNDS"]].rename(
 display(raw["CPIAUCNS"].loc[raw["CPIAUCNS"].CPIAUCNS.isna(),
                           ["observation_date", "CPIAUCNS"]])''')
 md('''## 4. Rebuild the Phase 2 analysis sample
-Keep January 2017 through September 2026. Require both a return and headline inflation; missing expectations do not remove an otherwise usable month. FEDFUNDS is a monthly average in percent, not a month-end policy announcement or a monetary-policy surprise. We add it without changing the original sample.''')
+Keep January 2017 through September 2026. Require both a return and headline inflation. A month can stay in the main sample when expectations are missing. We add FEDFUNDS as a monthly average in percent. It is available for every month in the main sample.''')
 code('''columns = ["month_index", "Year", "Month", "last_trading_date",
            "sp500_close", "sp500_return_pct"]
 all_months = prices[columns].copy()
@@ -97,9 +97,9 @@ print("Candidate months:", len(all_months))
 print("Main sample:", len(main))
 display(excluded[["Year", "Month", "reason"]])''')
 md('''## 5. Prepare the lag and the named comparison samples
-The final Phase 2 plan constructs the lag within the already restricted main sample. We keep that choice: January 2017 has no prior month in this sample, and November 2025 has no October CPI. October 2025 itself is already excluded. December 2016 CPI exists in the raw files; its exclusion here is a planned boundary choice, not unavailable source data.
+The final Phase 2 plan constructs the lag within the already restricted main sample. January 2017 has no prior month in this sample because December 2016 falls outside the study window. November 2025 lacks a prior value because October 2025 CPI is missing.
 
-The 2020 sensitivity samples exclude March and April 2020, the crash and rebound already identified in Phase 2. They do not exclude the whole year. The common-sample comparison uses exactly the lag model's months. All of these choices are saved before the report runs.''')
+The 2020 sensitivity samples exclude March and April 2020, the crash and rebound already identified in Phase 2. The common-sample comparison uses the lag model's months for both regressions.''')
 code('''lag_values = main[["month_index", "headline_yoy_pct"]].copy()
 lag_values["month_index"] += 1
 lag_values = lag_values.rename(
@@ -125,7 +125,7 @@ display(lag_excluded)
 display(pd.DataFrame({"Sample": samples.keys(),
                       "Months": [len(x) for x in samples.values()]}))''')
 md('''## 6. Validate and export
-These checks protect the sample sizes and the calendar alignment. We also verify that the lag really refers to one month earlier, rather than the preceding available row. A source manifest records the raw file hashes. Rerunning this notebook overwrites only the generated files in `data/processed`.''')
+Before using the exports, check the sample sizes, missing values, and calendar alignment. The lag must match the immediately preceding calendar month. A source manifest records the raw file hashes. Rerunning this notebook overwrites only the generated files in `data/processed`.''')
 code('''expected_sizes = {"main": 116, "lag": 114, "same_common": 114,
                   "main_no_extremes": 114, "lag_no_extremes": 112,
                   "expectations": 115, "interest": 116}
@@ -158,7 +158,7 @@ print("All checks passed. Seven analysis samples exported.")''')
 md('''## Sources and assistance
 Raw series: [SP500](https://fred.stlouisfed.org/series/SP500), [CPIAUCNS](https://fred.stlouisfed.org/series/CPIAUCNS), [CPILFENS](https://fred.stlouisfed.org/series/CPILFENS), [MICH](https://fred.stlouisfed.org/series/MICH), and [FEDFUNDS](https://fred.stlouisfed.org/series/FEDFUNDS), distributed by FRED. Missing CPI context: [BLS shutdown FAQ](https://www.bls.gov/cpi/additional-resources/2025-federal-government-shutdown-impact-cpi-faq.htm).
 
-This notebook adapts the group's final Phase 2 cleaning workflow. OpenAI Codex assisted with code, documentation, execution, and automated checks. The report explains the analyses and gives the full bibliography. The authors should review the code and interpretations before submitting.''')
+This notebook adapts the final Phase 2 cleaning workflow. OpenAI Codex assisted with its code, documentation, execution, and automated checks. The [report](Phase3_Report.ipynb) contains the full acknowledgement and bibliography.''')
 nb=nbf.v4.new_notebook(cells=cells,metadata={"kernelspec":{"display_name":"Python 3","language":"python","name":"python3"}})
 nbf.write(nb,ROOT/'Phase3_Data_Cleaning.ipynb')
 print('Built cleaning notebook')

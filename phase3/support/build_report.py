@@ -12,36 +12,34 @@ md('''# Inflation and Monthly S&P 500 Returns
 Neither group member is a native English speaker.
 
 ### 1. Introduction
-We want to understand how inflation relates to monthly S&P 500 price returns. Higher inflation may coincide with higher borrowing costs or pressure on firms' profits. However, it can also occur when demand and earnings are growing. These forces can work in different directions, so we should not assume that high inflation always means a bad month for stocks.
+We examine how U.S. inflation relates to monthly S&P 500 price returns. Higher inflation can coincide with rising borrowing costs and pressure on firms' profits, but it can also accompany strong demand. The historical relationship matters because investors may read a negative association as a signal about future returns.
 
-Our main question is: **Between January 2017 and September 2026, do months with higher year-over-year headline CPI inflation tend to have lower S&P 500 price returns, and does the relationship also appear using the previous calendar month's inflation?** We also keep two descriptive questions from Phase 2: does core inflation show a similar pattern, and how do consumer inflation expectations compare with recent inflation?
+**Research question.** From January 2017 through September 2026, did higher year-over-year headline CPI inflation coincide with lower monthly S&P 500 price returns? Does the association also appear when we use inflation from the previous calendar month? We also ask whether core inflation shows a similar pattern and how consumers' inflation expectations compare with recent inflation.
 
-This matters because an association between inflation and stocks is easy to turn into a stronger claim about what investors should do. Our project asks what the historical data actually support. We study monthly price changes, not total investment returns, and we do not test a trading strategy.
+Fama and Schwert (1977) found a negative relationship between expected inflation and common-stock returns in their 1953-1971 sample. Their distinction between expected and unexpected inflation matters here because we use observed CPI. Bernanke and Kuttner (2004) make a related distinction between anticipated and unexpected monetary policy changes when studying stock prices.
 
-Earlier research gives a reason to investigate a negative relationship. Fama and Schwert (1977) found that common-stock returns were negatively related to expected inflation in their 1953-1971 sample. Their distinction between expected and unexpected inflation is important: our models use observed year-over-year CPI, so they do not reproduce that study. Bernanke and Kuttner (2004) also distinguish unexpected monetary-policy changes from anticipated changes when studying stock prices. These papers motivate the question while showing why one observed inflation measure is unlikely to explain every market movement.
-
-**Summary of findings.** Both fitted slopes are negative: about **-0.349** percentage points of monthly return per percentage point of same-month inflation, and **-0.369** for previous-month inflation. The models explain only **2.5% and 2.8%** of return variation. Tests that allow for dependence between nearby months support the negative directions after a correction for two tests. However, ordinary regression tests do not pass the same adjusted threshold. Excluding the March-April 2020 extremes leaves the slopes similar. Adding an interest rate barely increases the same-month model's R². Overall, we find a weak negative association. Inflation alone explains little of the month-to-month movement in returns, and the significance conclusion depends on how we estimate uncertainty.''')
+Both models show a weak negative association and explain little of the variation in monthly returns. Evidence for negative slopes depends on how we estimate uncertainty. Core inflation shows a similarly weak relationship with returns, and consumer expectations tend to move with recent headline inflation.''')
 
 page('''## 2. Data description and cleaning
 ### Sources and purpose
-We combine the four saved Phase 2 series with one new series for the exploratory interest-rate model. All are distributed through FRED, but they come from different producers. The merged dataset was created for this classroom project; we received no external funding and collected no new survey responses.
+We assembled a monthly dataset to compare U.S. inflation and stock price returns over the same period. We use four saved Phase 2 series and add FEDFUNDS for the exploratory interest-rate model. FRED distributes all five series.
 
 | Series | Producer and original purpose | Measure used here |
 |---|---|---|
-| SP500 | S&P Dow Jones Indices; track large U.S. company stock prices | Daily close, converted to monthly price return |
-| CPIAUCNS | Bureau of Labor Statistics; measure consumer price change | Headline CPI-U, not seasonally adjusted |
-| CPILFENS | Bureau of Labor Statistics; measure consumer price change excluding food and energy | Core CPI-U, not seasonally adjusted |
-| MICH | University of Michigan Surveys of Consumers; measure consumer expectations | Median expected price change over the next 12 months (%) |
-| FEDFUNDS | Board of Governors of the Federal Reserve System; report money-market interest rates | Monthly-average effective federal funds rate (%) |
+| SP500 | S&P Dow Jones Indices, tracking large U.S. companies | Daily close, converted to monthly price return |
+| CPIAUCNS | Bureau of Labor Statistics, tracking consumer prices | Headline CPI-U, not seasonally adjusted |
+| CPILFENS | Bureau of Labor Statistics, tracking prices excluding food and energy | Core CPI-U, not seasonally adjusted |
+| MICH | University of Michigan Surveys of Consumers, surveying consumer expectations | Median expected price change over the next 12 months (%) |
+| FEDFUNDS | Board of Governors of the Federal Reserve System, reporting money-market rates | Monthly-average effective federal funds rate (%) |
 
 The four original CSV snapshots are retained rather than refreshed, so Phase 3 uses the same data as Phase 2. FEDFUNDS was downloaded for this phase and restricted to the same study window. Original series definitions are available from FRED (S&P Dow Jones Indices, n.d.; BLS, n.d.-a, n.d.-b; University of Michigan, n.d.; Board of Governors, n.d.).
 
 ### What one row and each column represent
-One row represents **one calendar month**, not one trading day or one person. The main file has 116 rows and 13 columns. The lag file adds `previous_headline_yoy_pct` and contains 114 rows.
+Each row represents **one calendar month**. The main file has 116 rows and 13 columns. The lag file adds `previous_headline_yoy_pct` and contains 114 rows.
 
 | Columns | Meaning and units |
 |---|---|
-| `month_index`, `Year`, `Month`, `date` | Calendar identifiers; month_index = Year × 12 + Month |
+| `month_index`, `Year`, `Month`, `date` | Calendar identifiers and a sequential month key |
 | `last_trading_date` | Date of the month's final available trading close |
 | `sp500_close` | Closing price-index level, in index points |
 | `sp500_return_pct` | Change from the previous month-end close, in percent |
@@ -52,29 +50,25 @@ One row represents **one calendar month**, not one trading day or one person. Th
 
 A one-unit difference in any rate means **one percentage point**. Returns cover one month, while year-over-year inflation covers twelve months.''')
 
-page('''### Cleaning choices and reproducibility
-The separate **[Phase 3 cleaning notebook](https://github.com/jkwon128/INFO2950-Project/blob/phase3-draft-2026-11-05/phase3/Phase3_Data_Cleaning.ipynb)** contains the complete workflow, explanatory Markdown, source-file hashes, and validation checks. The [project repository](https://github.com/jkwon128/INFO2950-Project) contains the original project, and the [original raw snapshots](https://github.com/jkwon128/INFO2950-Project/tree/main/data/raw) document the four Phase 2 inputs. The Phase 3 package includes the additional FEDFUNDS snapshot and all cleaned files.
+page('''### Cleaning and monthly alignment
+The [cleaning notebook](https://github.com/jkwon128/INFO2950-Project/blob/phase3-draft-2026-11-05/phase3/Phase3_Data_Cleaning.ipynb) documents the steps and exports the [processed data](https://github.com/jkwon128/INFO2950-Project/tree/phase3-draft-2026-11-05/phase3/data/processed) from the [archived raw data](https://github.com/jkwon128/INFO2950-Project/tree/phase3-draft-2026-11-05/phase3/data/raw).
 
-The cleaning notebook removes 96 daily rows without a stock closing price and selects the last available trading-day close in each month. It calculates return as `100 × (current close / previous close - 1)`. It calculates headline and core inflation as `100 × (current CPI / CPI twelve months earlier - 1)`, using calendar-month joins rather than row positions. It then merges the series, applies the planned dates, and exports the analysis samples. **No missing values are imputed.**
+We drop 96 daily records without an S&P 500 close and select the final available trading close in each month. Monthly price return is the percent change from the previous calendar month's close. Headline and core inflation are the percent changes from their CPI levels twelve calendar months earlier. We join the series by calendar month and leave missing values unfilled.
 
-| Sample | Months | Reason for the difference |
+| Sample | Months | Coverage |
 |---|---:|---|
-| Candidate window | 117 | January 2017-September 2026 |
-| Same-month main model | 116 | October 2025 CPI is missing |
-| Previous-month main model | 114 | Also excludes January 2017 and November 2025 |
-| Expectations comparison | 115 | September 2026 expectations are unavailable in our snapshot |
-| Same-month model without extremes | 114 | Removes March and April 2020 |
-| Previous-month model without extremes | 112 | Removes March and April 2020 |
-| Interest-rate extension | 116 | Rate is available for every main-sample month |
+| Study window | 117 | January 2017 through September 2026 |
+| Same-month model | 116 | Excludes October 2025, when CPI is missing |
+| Previous-month model | 114 | Also excludes January 2017 and November 2025 |
+| Expectations comparison | 115 | The snapshot ends in August 2026 |
+| Interest-rate extension | 116 | FEDFUNDS covers the full same-month sample |
 
-The lag is constructed **within the Phase 2 main sample**, as planned. January 2017 therefore has no preceding month in that sample, even though December 2016 CPI exists in the raw data. November 2025 has no October CPI. We retain this restriction rather than changing the planned sample after seeing the results.
+The Phase 2 plan matches each return to the prior calendar month within the main sample. December 2016 CPI is in the raw data but outside that sample, so January 2017 has no lagged value. November 2025 lacks a lagged value because October 2025 CPI is missing.
 
 ### Reliability, collection, and people represented
-The sources have documented definitions and identifiable producers, making the measures traceable. This does not mean they measure the same population or are free of error. BLS samples prices and constructs an aggregate urban-consumer index; a household's own purchases may differ from that basket (BLS, n.d.-c). The S&P 500 represents large publicly traded U.S. companies and excludes dividends. Neither series describes every household or investment.
+BLS samples prices to construct an index for urban consumers. A household's own spending may differ from that basket (BLS, n.d.-c). The S&P 500 covers large U.S. public companies, and its price index excludes dividends. The Michigan survey median summarizes consumers' expectations and can hide differences among respondents. We use published aggregates throughout.
 
-The October 2025 CPI gap reflects the shutdown-related interruption documented by BLS (2025). Dropping it avoids inventing an inflation rate, but leaves uncertainty about the association that would have been observed that month. Consumer expectations are survey responses summarized by a median, which hides disagreement and can be affected by participation and reporting differences.
-
-We use only published aggregates and no individual identifiers. We did not contact participants or independently verify their original consent procedures. The dataset description follows the questions proposed by Gebru et al. (2021). The saved source files make our calculations reproducible, although a fresh download later may contain revisions or different coverage.''')
+BLS (2025) attributes the October 2025 CPI gap to the federal government shutdown. That gap leaves the association for the omitted months unknown. Keeping archived snapshots makes the data inputs traceable if FRED later revises the series or changes their coverage. Our description follows Gebru et al. (2021).''')
 
 page('''## 3. Preregistration statements
 ### Statement 1: Same-month headline inflation and returns
@@ -92,17 +86,15 @@ Higher inflation could coincide with higher costs or expected policy tightening,
 The two analyses are closely related, as our reviewers noted. They are not independent replications or a formal comparison of timing effects. CPI for the previous month is generally released during the current return month (BLS, n.d.-d). Therefore, even the lagged model does not reproduce information available at the beginning of that month.
 
 ### What was added for Phase 3
-We follow the **final revised Phase 2 submission**, whose second model uses previous-month headline inflation. An older planning file proposed core inflation instead; that is not the final plan. Core inflation and expectations remain descriptive comparisons.
+The final Phase 2 submission specifies previous-month headline inflation for Statement 2, superseding an earlier plan that used core inflation. Core inflation and expectations remain descriptive. Phase 2 exploratory analysis already revealed the same-month slope direction and R².
 
-The Phase 2 EDA already revealed the same-month correlation, and therefore the slope direction and R². The first result is not a fully unseen confirmation. The added inference method and extensions are documented in `support/analysis_amendment.md`. They were already present in the working Phase 3 draft reviewed for this version; we do not claim that these additions were independently preregistered before the results were seen.
+Phase 3 adds one-sided tests of **H₀: slope ≥ 0** against **Hₐ: slope < 0** at the zero boundary. The primary tests use calendar-aware HAC standard errors with three monthly lags and Holm correction across the two tests at a family-wise 5% level. We also report two-sided 95% intervals, six- and twelve-lag checks, and ordinary OLS uncertainty for comparison.
 
-To satisfy the significance section, we test **H₀: slope ≥ 0** against **Hₐ: slope < 0**, using the zero boundary to calculate one-sided p-values. We use calendar-aware HAC uncertainty with three monthly lags and Holm correction across the two main tests, at a family-wise 5% level. We also report two-sided 95% intervals, six- and twelve-lag checks, and ordinary OLS uncertainty for comparison. These are Phase 3 additions, not methods specified in the original plan.
-
-Following reviewer feedback, we add a sensitivity check excluding March-April 2020, a common-sample timing comparison, and one exploratory interest-rate model. We retain both original models and report all results.''')
+We report both planned models alongside three exploratory comparisons: excluding March and April 2020, fitting both models on the same months, and adding the federal funds rate. The [analysis amendment](support/analysis_amendment.md) records these Phase 3 additions. The draft already contained fitted results at review, and the timing of the amendment relative to the first fit could not be verified.''')
 
 page('''## 4. Data analysis
 ### Load the cleaned data
-The report starts with the files exported by the separate cleaning notebook. These files already contain the required columns and samples. The assertions check the inputs; they do not change observations or fill missing values.''')
+The report starts with the files exported by the separate cleaning notebook. We check the expected sample sizes and required fields before fitting the models.''')
 code('''from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -182,7 +174,7 @@ ax.set(xlabel="Same-month headline inflation, year-over-year (%)",
        title="Figure 2. Same-month model (116 months)")
 plt.tight_layout()
 plt.show()''')
-md('''**Summarizing.** A one percentage point higher inflation rate is associated with about **0.349 percentage points lower monthly return**. The sign agrees with the hypothesis, but R² = 0.0252 means the line explains only about 2.5% of observed return variation. Figure 2 shows a wide spread of gains and losses around the line. The intercept, 2.316%, is the fitted return at zero inflation, slightly below the observed inflation range; it is not a guaranteed baseline return.''')
+md('''**Summarizing.** A one percentage point higher inflation rate is associated with about **0.349 percentage points lower monthly return**. The sign agrees with the hypothesis, but R² = 0.0252 means the line explains only about 2.5% of observed return variation. Figure 2 shows a wide spread of gains and losses around the line. The intercept is 2.316%, the fitted return at zero inflation, slightly below the observed range.''')
 
 page('''### Analysis 2: Previous-month inflation
 The second regression uses the previous calendar month's inflation. Its 114 rows follow the original sample rule; the lag was prepared in the cleaning notebook and is not a row-wise shift across the missing month.''')
@@ -205,10 +197,10 @@ ax.set(xlabel="Previous-month headline inflation, year-over-year (%)",
        title="Figure 3. Previous-month model (114 months)")
 plt.tight_layout()
 plt.show()''')
-md('''**Summarizing.** A one percentage point higher previous-month inflation rate is associated with about **0.369 percentage points lower current-month return**. R² is 0.0282, or about 2.8%. This is close to the first model, which is expected because inflation usually changes gradually between neighboring months. The slightly higher R² does not establish that lagged inflation is a better forecasting variable. These are in-sample descriptions with partly different observations.''')
+md('''**Summarizing.** A one percentage point higher previous-month inflation rate is associated with about **0.369 percentage points lower current-month return**. R² is 0.0282, or about 2.8%. This is close to the first model, which is expected because inflation usually changes gradually between neighboring months. The two R² values describe fits on slightly different sets of months.''')
 
 page('''### Predicting and examining unusual observations
-To make the slopes concrete, Table 2 evaluates both fitted lines at 2% and 6% inflation. Both values lie within the data range. These are fitted historical conditional means, not forecasts that investors could have made at the beginning of a month.''')
+To make the slopes concrete, Table 2 evaluates both fitted lines at 2% and 6% inflation. Both values lie within the data range. The values describe the fitted average return at each inflation rate.''')
 code('''prediction_rows = []
 for label, model, x in [("Same month", model1, x1),
                          ("Previous month", model2, x2)]:
@@ -217,7 +209,7 @@ for label, model, x in [("Same month", model1, x1),
                             "At 6% inflation": values[1],
                             "Difference (6% - 2%)": values[1] - values[0]})
 display(pd.DataFrame(prediction_rows).set_index("Model").round(3))''')
-md('''**Table 2.** The same-month fitted return falls from 1.618% to 0.221%, a difference of about 1.397 percentage points. The lagged fitted return falls from 1.648% to 0.170%. These differences are much smaller than the models' residual RMSEs of about 4.4 percentage points. An individual month's return can therefore be far from its fitted value. We have not measured performance on future, held-out months.
+md('''**Table 2.** The same-month fitted return falls from 1.618% to 0.221%, a difference of about 1.397 percentage points. The lagged fitted return falls from 1.648% to 0.170%. These differences are much smaller than the models' residual RMSEs of about 4.4 percentage points. An individual month's return can therefore be far from its fitted value. Forecast accuracy would require testing on held-out months.
 
 **Outliers and oddities.** A large return is not automatically the most influential observation: an unusual inflation value can also pull the line. We use Cook's distance to identify months that have a larger influence on the first fitted regression, without deleting them.''')
 code('''ols1 = sm.OLS(main[y], sm.add_constant(main[[x1]])).fit()
@@ -308,7 +300,7 @@ decisions = pd.DataFrame({"Holm-adjusted p": adjusted,
 display(decisions.round(4))''')
 md('''**Tables 5-6.** The same-month slope is -0.349, with a 95% interval of about **[-0.670, -0.028]**. The previous-month slope is -0.369, with an interval of about **[-0.682, -0.057]**. Their one-sided p-values are approximately 0.0164 and 0.0102. After Holm correction, both adjusted p-values are approximately **0.0205**.
 
-At the chosen family-wise 5% level, we **reject both nonnegative-slope null hypotheses under the primary HAC specification**. This supports the negative directions in this sample. It does not show that inflation caused the return differences, establish a useful forecast, or make the two similar models independent confirmations.
+At the chosen family-wise 5% level, we **reject both nonnegative-slope null hypotheses under the primary HAC specification**. This supports the negative directions in this sample. The models use related predictors and share most of their observations.
 
 Statistical evidence and explanatory power answer different questions. A slope can be distinguishable from zero under a particular uncertainty model while still leaving almost all month-to-month return variation unexplained. Here the low R² values and large residual errors remain central to the conclusion.''')
 
@@ -336,7 +328,7 @@ for j, (label, model) in enumerate([("Same month", ols1),
 display(pd.DataFrame(uncertainty_rows).round(4))''')
 md('''**Table 7.** Both negative-slope conclusions remain below the adjusted 5% threshold with six and twelve HAC lags. However, ordinary OLS fails to reject either null after the same correction (both adjusted p-values are about 0.0744). The inferential conclusion therefore depends on how uncertainty is calculated, even though the slope estimates themselves do not change.
 
-HAC standard errors are smaller here; “robust” does not mean they must be larger or more conservative. They estimate uncertainty differently, incorporating the observed covariance pattern. We retain the draft's three-month specification and report the alternatives to show how much the conclusion depends on this choice. The defensible conclusion is a weak negative historical association with evidence under the stated HAC assumptions, rather than a result that is statistically decisive under every reasonable specification.''')
+HAC standard errors are smaller here; “robust” does not mean they must be larger or more conservative. They estimate uncertainty differently, incorporating the observed covariance pattern. We retain the draft's three-month specification and report the alternatives to show how much the conclusion depends on this choice. The evidence for negative slopes is conditional on the uncertainty method.''')
 
 page('''## 6. Exploratory checks
 ### Do the 2020 extremes drive the slopes?
@@ -355,12 +347,12 @@ checks = [
     describe_fit("Same month: common 114 months", samples["same_common"], [x1])]
 check_table = pd.DataFrame(checks).set_index("Model / sample")
 display(check_table.round(4))''')
-md('''**Table 8.** Excluding the two extreme months changes the same-month slope from -0.349 to **-0.337**, and the previous-month slope from -0.369 to **-0.358**. Both remain negative and close to their original sizes. R² remains low, at about 2.6% and 3.0%. The broad descriptive conclusion therefore does not depend on those two observations alone. This does not show that the models are insensitive to every other period or that their p-values are unchanged; this check compares the fitted relationships.
+md('''**Table 8.** Excluding the two extreme months changes the same-month slope from -0.349 to **-0.337**, and the previous-month slope from -0.369 to **-0.358**. Both remain negative and close to their original sizes. R² remains low, at about 2.6% and 3.0%. The broad descriptive conclusion therefore does not depend on those two observations alone. This comparison focuses on slopes and R².
 
-On the common 114-month sample, the same-month slope is **-0.350** with R² about 0.0253. The small difference from the original same-month result suggests that the two extra months are not the main reason for the models' slight differences. We still have not formally tested whether the two slopes differ, and the difference is not evidence of a useful one-month forecasting advantage.''')
+On the common 114-month sample, the same-month slope is **-0.350** with R² about 0.0253. The small difference from the original same-month result suggests that the two extra months are not the main reason for the models' slight differences. The comparison is descriptive.''')
 
 page('''### Does adding an interest rate explain more?
-The reviewers suggested interest rates as an additional exploratory analysis. We add the **same-month monthly-average effective federal funds rate** to the first model. The sample remains 116 months, so the R² comparison uses identical observations. We choose one rate measure and one timing specification rather than searching over many alternatives.
+The reviewers suggested interest rates as an additional exploratory analysis. We add the **same-month monthly-average effective federal funds rate** to the first model. The sample remains 116 months, so the R² comparison uses identical observations. The exploratory model uses one rate measure and one timing specification.
 
 Bernanke and Kuttner (2004) study stock-market responses to unexpected policy changes. Our rate level does not measure those surprises. This extension asks only whether including a broad monetary-policy condition changes the descriptive inflation relationship.''')
 code('''rate_frame = samples["interest"]
@@ -373,14 +365,14 @@ print(f"Headline inflation coefficient: {rate_model.coef_[0]:.4f}")
 print(f"Federal funds rate coefficient: {rate_model.coef_[1]:.4f}")
 print(f"R-squared: {rate_r2:.4f}")
 print(f"Increase in R-squared: {rate_r2 - model1.score(main[[x1]], main[y]):.4f}")''')
-md('''Holding the rate fixed, a one percentage point higher inflation rate is associated with about **0.349 percentage points lower monthly return**, almost unchanged from the main model. Holding inflation fixed, a one percentage point higher federal funds rate is associated with about **0.071 percentage points higher return**. That small positive coefficient should not be read as evidence that raising rates increases stock returns.
+md('''Holding the rate fixed, a one percentage point higher inflation rate is associated with about **0.349 percentage points lower monthly return**, almost unchanged from the main model. Holding inflation fixed, a one percentage point higher federal funds rate is associated with about **0.071 percentage points higher return**.
 
-R² rises from **0.0252 to 0.0261**, an increase of about 0.0009, or 0.09 percentage points of explained variation. Adding a predictor cannot reduce ordinary in-sample R², so this small increase alone is not persuasive evidence of improvement. We make no additional significance claim for this exploratory coefficient.
+R² rises from **0.0252 to 0.0261**, an increase of about 0.0009, or 0.09 percentage points of explained variation. Since ordinary in-sample R² can only stay the same or rise when a predictor is added, we treat the small gain as descriptive.
 
-The extension leaves most return variation unexplained. Rate expectations, earnings news, growth, risk appetite, and unexpected events could all matter. We have not measured their contributions here. Adding one rate level does not resolve omitted-variable bias or identify a causal inflation effect.''')
+The extension leaves most return variation unexplained. Rate expectations, earnings news, growth, risk appetite, and unexpected events could all contribute to the remaining variation.''')
 
 page('''### Core inflation and consumer expectations
-These comparisons answer the secondary questions retained from Phase 2. They are descriptive and are not replacements for the two main regressions. We use correlations to keep the comparison focused.''')
+We use descriptive correlations to answer the secondary questions from Phase 2.''')
 code('''exp = samples["expectations"]
 comparison = pd.DataFrame([
     {"Pair": "Headline inflation and return", "n": len(main),
@@ -398,14 +390,14 @@ above = (exp.expected_inflation_pct > exp[x1]).sum()
 print(f"Expectations exceed recent headline inflation in {above} of {len(exp)} months.")''')
 md('''**Table 9.** Core inflation has a weak negative correlation with returns, **-0.122**, compared with **-0.159** for headline inflation. Thus, the descriptive direction also appears when food and energy are excluded, but the relationship is not stronger. Headline and core inflation correlate **0.920**, so similar patterns are not independent evidence.
 
-Expected inflation and recent headline inflation correlate **0.701**, while the correlation between expectations and returns is only **-0.035**. Expectations exceed recent headline inflation in **78 of 115 months**. This is not evidence that consumers overpredicted inflation: expectations concern the next twelve months, while year-over-year CPI describes the previous twelve months. Testing forecast accuracy would require matching the expectation to later realized inflation.
+Expected inflation and recent headline inflation correlate **0.701**, while the correlation between expectations and returns is only **-0.035**. Expectations exceed recent headline inflation in **78 of 115 months**. Expectations cover the next twelve months, while year-over-year CPI covers the previous twelve. Assessing forecast accuracy would require matching expectations to later realized inflation.
 
 ## 7. Conclusions
 Our two main analyses give similar answers. Higher headline inflation is associated with lower monthly S&P 500 price returns in the observed period, whether inflation is measured in the same month or the previous calendar month. The slopes are about -0.35 and -0.37 percentage points of return per percentage point of inflation. Under the primary calendar-aware HAC method, both negative directions pass the two-test Holm correction. The ordinary OLS comparison is less decisive, so we qualify that statistical conclusion.
 
 The practical explanatory result is clearer: both models explain less than 3% of monthly return variation. Removing March-April 2020 leaves the slopes similar, and adding the federal funds rate changes little. Core inflation shows the same weak descriptive direction. Consumer expectations track recent inflation to some extent, but they have little contemporaneous association with returns in this sample.
 
-These results describe a limited historical association. They do not establish causation, show that inflation alone is enough to forecast returns, or imply that inflation is irrelevant to stock prices. A more targeted future study could separate expected inflation from announcement surprises and align market returns to actual release times.''')
+A follow-up study could use actual release times to distinguish the role of inflation expectations from the market's response to announcement surprises.''')
 
 md('''## 8. Limitations
 ### Timing and measurement limit what the slopes mean
@@ -418,11 +410,11 @@ md('''## 8. Limitations
 **Missing months and sample choices still matter.** October 2025 CPI is absent, and the planned lag sample also excludes January 2017 and November 2025. We do not know how the missing CPI month would change the relationship. Although the common-sample check shows little change here, it cannot recover missing information. Our window is also short enough that particular economic episodes may carry substantial weight.
 
 ### Statistical significance has limits
-**HAC is an approximation, not a guarantee.** We allow for short-run residual dependence and changing variance, but the sample spans the pandemic and the later inflation surge. Relationships may change across regimes rather than remain stable. Three-, six-, and twelve-lag HAC estimates agree on the main decisions, but ordinary OLS uncertainty gives a different adjusted decision. The p-values should be interpreted with that sensitivity in mind.
+**HAC inference is approximate in this sample.** We allow for short-run residual dependence and changing variance, but the sample spans the pandemic and the later inflation surge. Relationships may change across regimes rather than remain stable. Three-, six-, and twelve-lag HAC estimates agree on the main decisions, but ordinary OLS uncertainty gives a different adjusted decision. The p-values should be interpreted with that sensitivity in mind.
 
 **The first model was partly visible during Phase 2.** Its descriptive correlation already revealed the slope direction and R². Our added tests follow the negative hypotheses, but they are not untouched preregistered confirmations. The two models also use nearly the same data and related predictors, so their agreement is limited evidence of replication.
 
-**A low p-value is not a measure of forecasting accuracy or importance.** Even under our primary test, more than 97% of return variation remains unexplained. Conversely, failure to reject under another method does not prove that the true association is zero. Confidence intervals and p-values describe uncertainty under assumptions; they cannot resolve the measurement and design problems above.''')
+**Significance and forecasting accuracy answer different questions.** Even under our primary test, more than 97% of return variation remains unexplained. Conversely, failure to reject under another method does not prove that the true association is zero. Confidence intervals and p-values describe uncertainty under assumptions; they cannot resolve the measurement and design problems above.''')
 
 page('''### Generalization and potential harms
 **Unmeasured factors prevent a causal interpretation.** Inflation, monetary policy, earnings, growth, and market expectations can move together. Our exploratory rate coefficient does not isolate policy changes or remove all confounding. A negative inflation slope may summarize several conditions that coincide during this period rather than inflation's separate effect.
@@ -433,11 +425,11 @@ page('''### Generalization and potential harms
 
 ## 9. Acknowledgements and bibliography
 ### Assistance and course materials
-We thank our Phase 2 reviewers for recommending residual checks, a 2020 sensitivity analysis, careful treatment of CPI release timing, and an exploratory interest-rate extension. We retained both approved main models and documented the additions separately.
+We thank our Phase 2 reviewers for recommending residual checks, a 2020 sensitivity analysis, careful treatment of CPI release timing, and an exploratory interest-rate extension. We retained both planned main models and documented the additions separately.
 
 We used the INFO 2950 Phase 3-4 rubric and Discussions 9 and 10 to organize the report. The three Discussion 10 example notebooks helped identify useful presentation choices and mistakes to avoid. HW3 informed the regression workflow, and HW5 informed the discussion of regression uncertainty. The calendar-aware HAC calculation is an additional method, explained here and supported by the sources below.
 
-**OpenAI Codex assisted with reading the project materials, preparing the notebooks and prose, checking calculations, and exporting the PDF.** The request was to complete Phase 3 using the existing project and feedback while keeping a natural writing style. Automated checks compared the cleaned data with Phase 2, checked sample sizes and calendar lags, and compared independent regression implementations. This disclosure does not claim that either group member personally performed those automated checks. The authors remain responsible for reviewing the submitted work.
+OpenAI Codex helped review project materials and the draft, prepare and run the notebooks, write portions of the code, edit the report, run automated checks, and export the original PDF. The authors are responsible for the final analyses and interpretations.
 
 ### Research and methods references
 Fama, E. F., & Schwert, G. W. (1977). Asset returns and inflation. *Journal of Financial Economics, 5*(2), 115-146. [Author's paper page](https://www.billschwert.com/ari.htm).
