@@ -20,4 +20,4 @@ To export the executed report, run `jupyter nbconvert --to html Phase3_Report.ip
 
 ## AI acknowledgement
 
-AI tools were used to help write portions of the code, polish the writing, and review the draft. The authors are responsible for the final content and interpretations.
+AI tools were used to help write portions of the code, polish the writing, and review the draft. We used ChatGPT to convert the Jupyter notebook (.ipynb) to PDF. The authors are responsible for the final content and interpretations.
